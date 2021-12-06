@@ -1,0 +1,1 @@
+export declare const NEST_MYSQL2_OPTIONS = "NEST_MYSQL2_OPTIONS";
