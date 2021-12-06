@@ -9,15 +9,20 @@
  *  Once you begin customizing NestMysql2Module, you'll probably want
  *  to delete this controller.
  */
-import { Controller, Get } from '@nestjs/common';
-import { NestMysql2Service } from '../nest-mysql2.service';
+import { Controller, Get, Inject } from '@nestjs/common';
+
+import { MYSQL2_CONNECTION } from '../constants';
 
 @Controller()
 export class NestMysql2ClientController {
-  constructor(private readonly nestMysql2Service: NestMysql2Service) {}
+  constructor(@Inject(MYSQL2_CONNECTION) private readonly mysql) {}
 
   @Get()
-  index() {
-    return this.nestMysql2Service.test();
+  async index() {
+    const r = await this.mysql.query('SELECT * FROM users');
+
+    console.log(r);
+    
+    return 'yeap';
   }
 }

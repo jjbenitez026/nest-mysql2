@@ -15,6 +15,21 @@ import { NestMysql2Module } from '../nest-mysql2.module';
 
 @Module({
   controllers: [NestMysql2ClientController],
-  imports: [NestMysql2Module.register({})],
+  imports: [
+    NestMysql2Module.registerAsync({
+      useFactory: () => {
+        return {
+          connectionLimit: 10,
+          database: 'rhbnb_api_db',
+          host: '192.168.48.5',
+          port: 3306,
+          queueLimit: 0,
+          password: 'pass',
+          user: 'root',
+          waitForConnections: true,
+        };
+      },
+    }),
+  ],
 })
 export class NestMysql2ClientModule {}

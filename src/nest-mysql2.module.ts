@@ -9,11 +9,12 @@ import {
   NestMysql2OptionsFactory,
 } from './interfaces';
 import { createNestMysql2Providers } from './nest-mysql2.providers';
+import { connectionFactory } from './nest-mysql2-connection.provider';
 
 @Global()
 @Module({
-  providers: [NestMysql2Service],
-  exports: [NestMysql2Service],
+  providers: [NestMysql2Service, connectionFactory],
+  exports: [NestMysql2Service, connectionFactory],
 })
 export class NestMysql2Module {
   /**

@@ -3,6 +3,9 @@ import { Injectable, Inject, Logger } from '@nestjs/common';
 import { NEST_MYSQL2_OPTIONS} from './constants';
 import { NestMysql2Options } from './interfaces';
 
+import * as mysql from 'mysql2';
+import { Pool } from 'mysql2';
+
 /**
  * Sample interface for NestMysql2Service
  *
@@ -10,7 +13,7 @@ import { NestMysql2Options } from './interfaces';
  *
  */
 interface INestMysql2Service {
-  test(): Promise<any>;
+  getMysql(): Pool;
 }
 
 @Injectable()
@@ -25,7 +28,10 @@ interface INestMysql2Service {
  *
  */
 export class NestMysql2Service implements INestMysql2Service {
+
   private readonly logger: Logger;
+  private _mysqlConnection: any;
+  
   constructor(
     @Inject(NEST_MYSQL2_OPTIONS) private _NestMysql2Options: NestMysql2Options,
   ) {
@@ -33,7 +39,12 @@ export class NestMysql2Service implements INestMysql2Service {
     this.logger.log(`Options: ${JSON.stringify(this._NestMysql2Options)}`);
   }
 
-  async test(): Promise<any> {
-    return 'Hello from NestMysql2Module!';
+  getMysql(): Pool {
+    if (!this._mysqlConnection) {
+      this._mysqlConnection = mysql
+        .createPool(this._NestMysql2Options).promise();
+    }
+
+    return this._mysqlConnection;
   }
 }
